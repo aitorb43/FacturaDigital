@@ -1,6 +1,7 @@
 ﻿using FacturaDigital.Entidades;
 using FacturaDigital.Interfaces;
 using FacturaDigital.Modelo;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
@@ -15,7 +16,7 @@ namespace FacturaDigital.Servicios
         private static String _baseUrl;
         private static String _token;
 
-        public FacturaDigitalService() 
+        public FacturaDigitalService()
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
             _usuario = builder.GetSection("ApiSettings:usuario").Value;
@@ -42,33 +43,107 @@ namespace FacturaDigital.Servicios
             return resultado;
         }
 
-        public async Task<String> Emision()
+        public async Task<ResultadoEmision> Emision(Cuerpo cuerpo)
         {
             String lista = null;
 
-            /*
-             * await Autenticar();
-           
+            // var a = Autenticar();
+
+            var cliente = new HttpClient();
+            cliente.BaseAddress = new Uri(_baseUrl);
+
+            cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+
+            var content = new StringContent(JsonConvert.SerializeObject(cuerpo), Encoding.UTF8, "application/json");
+
+            var response = await cliente.PostAsync("api/Emision", content);
+
+            var json_respuesta = await response.Content.ReadAsStringAsync();
+            var resultado = JsonConvert.DeserializeObject<ResultadoEmision>(json_respuesta);
+
+
+            return resultado;
+        }
+
+        public async Task<ResultadoRetencionCorreoAnular> Anular(Anular anular)
+        {
+
             var cliente = new HttpClient();
             cliente.BaseAddress = new Uri(_baseUrl);
             cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var emision = new Emision() { usuario = _usuario, clave = _clave };
+            //ResultadoAnular resultado = new ResultadoAnular();
 
-            var content = new StringContent(JsonConvert.SerializeObject(emision), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(anular), Encoding.UTF8, "application/json");
 
-            var response = await cliente.PostAsync("api/Producto/Lista", content);
+            var response = await cliente.PostAsync("api/Anular", content);
 
-            if (response.IsSuccessStatusCode)
-            {
+            //          if (response.IsSuccessStatusCode)
+            //           {
 
-                var json_respuesta = await response.Content.ReadAsStringAsync();
-                var resultado = JsonConvert.DeserializeObject<ResultadoEmision>(json_respuesta);
-                lista = resultado.lista;
-            }
-            */
+            var json_respuesta = await response.Content.ReadAsStringAsync();
+            var resultado = JsonConvert.DeserializeObject<ResultadoRetencionCorreoAnular>(json_respuesta); ;
+            //           }
 
-            return lista;
-        }
+            return resultado;
 
         }
+
+        public async Task<ResultadoRetencionCorreoAnular> AplicarRetencion(AplicarRetencion aplicarRetencion)
+        {
+
+            var cliente = new HttpClient();
+            cliente.BaseAddress = new Uri(_baseUrl);
+            cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            var content = new StringContent(JsonConvert.SerializeObject(aplicarRetencion), Encoding.UTF8, "application/json");
+
+            var response = await cliente.PostAsync("api/AplicarRetencion", content);
+
+            //          if (response.IsSuccessStatusCode)
+            //           {
+
+            var json_respuesta = await response.Content.ReadAsStringAsync();
+            var resultado = JsonConvert.DeserializeObject<ResultadoRetencionCorreoAnular>(json_respuesta); ;
+            //           }
+
+            return resultado;
+
+        }
+
+        public async Task<ResultadoRetencionCorreoAnular> CorreoEnvios(CorreoEnvios correoEnvios)
+        {
+            var cliente = new HttpClient();
+            cliente.BaseAddress = new Uri(_baseUrl);
+            cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            var content = new StringContent(JsonConvert.SerializeObject(correoEnvios), Encoding.UTF8, "application/json");
+
+            var response = await cliente.PostAsync("api/Correo/Enviar", content);
+
+
+            var json_respuesta = await response.Content.ReadAsStringAsync();
+            var resultado = JsonConvert.DeserializeObject<ResultadoRetencionCorreoAnular>(json_respuesta); ;
+
+            return resultado;
+        }
+
+        public async Task<ResultadoCorreoRastreo> CorreoRastreo(CorreoRastreo correoRastreo)
+        {
+            var cliente = new HttpClient();
+            cliente.BaseAddress = new Uri(_baseUrl);
+            cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            var content = new StringContent(JsonConvert.SerializeObject(correoRastreo), Encoding.UTF8, "application/json");
+
+            var response = await cliente.PostAsync("api/Correo/Rastreo", content);
+
+
+            var json_respuesta = await response.Content.ReadAsStringAsync();
+            var resultado = JsonConvert.DeserializeObject<ResultadoCorreoRastreo>(json_respuesta); ;
+
+            return resultado;
+        }
+
+    }
 }
