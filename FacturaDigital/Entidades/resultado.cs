@@ -2,6 +2,7 @@
 {
     public class resultado
     {
+       
         public string imprentaDigital { get; set; }
         public string autorizado { get; set; }
         public string serie { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FacturaDigital.Modelo
+namespace FacturaDigital.Entidades
 {
     public class InfoAdicional
     {

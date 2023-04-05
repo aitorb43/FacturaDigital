@@ -11,6 +11,7 @@ namespace FacturaDigital.Servicios
 {
     public class FacturaDigitalService : IFacturaDigitalService
     {
+        
         private static String _usuario;
         private static String _clave;
         private static String _baseUrl;

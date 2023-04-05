@@ -5,6 +5,7 @@ namespace FacturaDigital.Interfaces
 {
     public interface IFacturaDigitalService
     {
+        
         public Task<ResultadoCredenciales> Autenticar(Credenciales credenciales);
         public Task<ResultadoEmision> Emision(Cuerpo cuerpo);
         public Task<ResultadoRetencionCorreoAnular> Anular(Anular anular);

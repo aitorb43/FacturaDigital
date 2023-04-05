@@ -2,6 +2,7 @@
 {
     public class totalRetencion
     {
+        
         public string totalBaseImponible { get; set; }
         public string totalIVA { get; set; }
         public string totalRetenido { get; set; }

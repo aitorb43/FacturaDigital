@@ -8,7 +8,6 @@ namespace FacturaDigital.Controllers
     public class FacturaDigitalController : Controller
     {
         private IFacturaDigitalService facturaDigitalService;
-
         public FacturaDigitalController(IFacturaDigitalService facturaDigitalService)
         {
             this.facturaDigitalService = facturaDigitalService;
